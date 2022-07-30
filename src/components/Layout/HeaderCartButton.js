@@ -1,8 +1,13 @@
-import classes from './HeaderCartButton.module.css';
+import { useContext } from 'react';
+import CartContext from '../../store/cart-context';
 import CartIcon from '../Cart/CartIcon';
+import classes from './HeaderCartButton.module.css';
 
 export default function HeaderCartButton(props) {
-  const cartQuantity = 0;
+  const cartCtx = useContext(CartContext);
+  const cartQuantity = cartCtx.items.reduce((currQuantity, item) => {
+    return currQuantity + item.amount;
+  }, 0);
 
   return (
     <button className={classes.button} onClick={props.onClick}>
