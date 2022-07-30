@@ -2,7 +2,7 @@ import Card from '../UI/Card';
 import classes from './AvailableMeals.module.css';
 import MealItem from './MealItem';
 
-function AvailableMeals() {
+export default function AvailableMeals() {
   const meals = [
     {
       id: 'm1',
@@ -42,5 +42,3 @@ function AvailableMeals() {
     </section>
   );
 }
-
-export default AvailableMeals;

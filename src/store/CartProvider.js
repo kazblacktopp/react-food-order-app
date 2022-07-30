@@ -1,6 +1,6 @@
 import CartContext from './cart-context';
 
-export function CartProvider(props) {
+export default function CartProvider(props) {
   const cartContext = {
     items: [],
     totalAmount: 0,
@@ -18,5 +18,3 @@ export function CartProvider(props) {
     </CartContext.Provider>
   );
 }
-
-export default CartProvider;

@@ -1,7 +1,7 @@
 import classes from './HeaderCartButton.module.css';
 import CartIcon from '../Cart/CartIcon';
 
-function HeaderCartButton(props) {
+export default function HeaderCartButton(props) {
   const cartQuantity = 0;
 
   return (
@@ -14,5 +14,3 @@ function HeaderCartButton(props) {
     </button>
   );
 }
-
-export default HeaderCartButton;

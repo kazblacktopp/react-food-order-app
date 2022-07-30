@@ -1,6 +1,6 @@
 import classes from './Input.module.css';
 
-function Input(props) {
+export default function Input(props) {
   return (
     <div className={classes.input}>
       <label htmlFor={props.id}>{props.label}</label>
@@ -16,5 +16,3 @@ function Input(props) {
     </div>
   );
 }
-
-export default Input;
