@@ -10,7 +10,7 @@ function Input(props) {
         min={props.min}
         max={props.max}
         step={props.step}
-        value={props.value}
+        defaultValue={props.defaultValue}
         onChange={props.onChange}
       />
     </div>
