@@ -1,18 +1,13 @@
+import React from 'react';
 import classes from './Input.module.css';
 
-export default function Input(props) {
+function Input(props, ref) {
   return (
     <div className={classes.input}>
       <label htmlFor={props.id}>{props.label}</label>
-      <input
-        id={props.id}
-        type={props.type}
-        min={props.min}
-        max={props.max}
-        step={props.step}
-        defaultValue={props.defaultValue}
-        onChange={props.onChange}
-      />
+      <input {...props} ref={ref} />
     </div>
   );
 }
+
+export default React.forwardRef(Input);
