@@ -2,10 +2,12 @@ import CartProvider from './store/CartProvider';
 import Header from './components/Layout/Header';
 import MealsSummary from './components/Meals/MealsSummary';
 import AvailableMeals from './components/Meals/AvailableMeals';
+import Modal from './components/UI/Modal';
 
 function App() {
   return (
     <CartProvider>
+      <Modal />
       <Header />
       <main>
         <MealsSummary />
