@@ -8,7 +8,7 @@ export default function MealItemForm(props) {
   function formSubmitHandler(event) {
     event.preventDefault();
     const amount = inputRef.current.value;
-    props.onAddItem(amount);
+    props.onAddItem(+amount);
   }
 
   return (
