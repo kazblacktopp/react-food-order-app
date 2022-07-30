@@ -23,7 +23,12 @@ export default function Cart(props) {
           <span>$39.98</span>
         </div>
         <div className={classes.actions}>
-          <button className={classes['button--alt']}>Close</button>
+          <button
+            className={classes['button--alt']}
+            onClick={props.onCloseCart}
+          >
+            Close
+          </button>
           <button className={classes.button}>Order</button>
         </div>
       </div>

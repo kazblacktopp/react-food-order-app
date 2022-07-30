@@ -8,18 +8,18 @@ import AvailableMeals from './components/Meals/AvailableMeals';
 function App() {
   const [cartIsOpen, setCartIsOpen] = useState(false);
 
-  function cartBtnClickHandler() {
-    if (cartIsOpen) {
-      setCartIsOpen(false);
-    } else {
-      setCartIsOpen(true);
-    }
+  function closeCartHandler() {
+    setCartIsOpen(false);
+  }
+
+  function openCartHandler() {
+    setCartIsOpen(true);
   }
 
   return (
     <CartProvider>
-      {cartIsOpen && <Cart />}
-      <Header onCartBtnClick={cartBtnClickHandler} />
+      {cartIsOpen && <Cart onCloseCart={closeCartHandler} />}
+      <Header onOpenCart={openCartHandler} />
       <main>
         <MealsSummary />
         <AvailableMeals />
