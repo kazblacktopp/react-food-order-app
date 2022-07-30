@@ -1,10 +1,11 @@
 import classes from './Cart.module.css';
+import CartItem from './CartItem';
 
-export default function Cart() {
+export default function Cart(props) {
   return (
     <div>
       <ul className={classes['cart-items']}>
-        <li>Sushi</li>
+        <CartItem key="item-1" name="Sushi" price="22.98" amount="1" />
       </ul>
       <div className={classes.total}>
         <span>Total Amount</span>
