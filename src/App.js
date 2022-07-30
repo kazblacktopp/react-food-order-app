@@ -1,17 +1,25 @@
+import { useState } from 'react';
 import CartProvider from './store/CartProvider';
+import Cart from './components/Cart/Cart';
 import Header from './components/Layout/Header';
 import MealsSummary from './components/Meals/MealsSummary';
 import AvailableMeals from './components/Meals/AvailableMeals';
-import Modal from './components/UI/Modal/Modal';
-import Cart from './components/Cart/Cart';
 
 function App() {
+  const [cartIsOpen, setCartIsOpen] = useState(false);
+
+  function cartBtnClickHandler() {
+    if (cartIsOpen) {
+      setCartIsOpen(false);
+    } else {
+      setCartIsOpen(true);
+    }
+  }
+
   return (
     <CartProvider>
-      <Modal>
-        <Cart />
-      </Modal>
-      <Header />
+      {cartIsOpen && <Cart />}
+      <Header onCartBtnClick={cartBtnClickHandler} />
       <main>
         <MealsSummary />
         <AvailableMeals />

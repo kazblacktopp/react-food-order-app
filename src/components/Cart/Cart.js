@@ -1,5 +1,6 @@
-import classes from './Cart.module.css';
+import Modal from '../UI/Modal/Modal';
 import CartItem from './CartItem';
+import classes from './Cart.module.css';
 
 export default function Cart(props) {
   const cartItems = [
@@ -14,16 +15,18 @@ export default function Cart(props) {
   ));
 
   return (
-    <div>
-      <ul className={classes['cart-items']}>{cartItems}</ul>
-      <div className={classes.total}>
-        <span>Total Amount</span>
-        <span>$39.98</span>
+    <Modal>
+      <div>
+        <ul className={classes['cart-items']}>{cartItems}</ul>
+        <div className={classes.total}>
+          <span>Total Amount</span>
+          <span>$39.98</span>
+        </div>
+        <div className={classes.actions}>
+          <button className={classes['button--alt']}>Close</button>
+          <button className={classes.button}>Order</button>
+        </div>
       </div>
-      <div className={classes.actions}>
-        <button className={classes['button--alt']}>Close</button>
-        <button className={classes.button}>Order</button>
-      </div>
-    </div>
+    </Modal>
   );
 }
