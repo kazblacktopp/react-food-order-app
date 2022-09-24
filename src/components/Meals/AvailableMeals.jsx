@@ -6,6 +6,7 @@ import { API_URL } from '../../config/config';
 
 export default function AvailableMeals() {
   const [meals, setMeals] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function fetchMeals() {
@@ -34,7 +35,16 @@ export default function AvailableMeals() {
       }
     }
     fetchMeals();
+    setIsLoading(false);
   }, []);
+
+  if (isLoading) {
+    return (
+      <section className={classes.mealIsLoading}>
+        <p>Loading...</p>
+      </section>
+    );
+  }
 
   return (
     <section className={classes.meals}>
