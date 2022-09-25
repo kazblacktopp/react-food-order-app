@@ -7,6 +7,7 @@ import { API_URL } from '../../config/config';
 export default function AvailableMeals() {
   const [meals, setMeals] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [httpError, setHttpError] = useState(null);
 
   useEffect(() => {
     async function fetchMeals() {
@@ -30,18 +31,27 @@ export default function AvailableMeals() {
         }
 
         setMeals(fetchedMeals);
+        setIsLoading(false);
       } catch (error) {
-        console.error(error.message);
+        setIsLoading(false);
+        setHttpError(error.message);
       }
     }
     fetchMeals();
-    setIsLoading(false);
   }, []);
 
   if (isLoading) {
     return (
       <section className={classes.mealIsLoading}>
         <p>Loading...</p>
+      </section>
+    );
+  }
+
+  if (httpError) {
+    return (
+      <section className={classes.httpError}>
+        <p>{httpError}</p>
       </section>
     );
   }
