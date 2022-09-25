@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 
 function useAJAX() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  async function sendRequest(requestConfig, applyDataFn) {
+  const sendRequest = useCallback(async (requestConfig, applyDataFn) => {
     const { url, options = null } = requestConfig;
     setIsLoading(true);
     setError(null);
@@ -28,12 +28,11 @@ function useAJAX() {
       const data = await response.json();
 
       applyDataFn(data);
-      setIsLoading(false);
     } catch (error) {
-      setError(error.message);
-      setIsLoading(false);
+      setError(error.message || 'Something went wrong!');
     }
-  }
+    setIsLoading(false);
+  }, []);
 
   return { isLoading, error, sendRequest };
 }

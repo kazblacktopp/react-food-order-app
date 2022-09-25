@@ -32,7 +32,7 @@ export default function AvailableMeals() {
 
   useEffect(() => {
     sendHttpRequest({ url: `${API_URL}/meals.json` }, extractMeals);
-  }, []);
+  }, [sendHttpRequest]);
 
   if (isLoading) {
     return (
