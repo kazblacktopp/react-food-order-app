@@ -1,43 +1,37 @@
 import { useState, useEffect } from 'react';
+
+import useAJAX from '../../hooks/use-ajax';
 import Card from '../UI/Card';
-import classes from './AvailableMeals.module.css';
 import MealItem from './MealItem';
 import { API_URL } from '../../config/config';
 
+import classes from './AvailableMeals.module.css';
+
 export default function AvailableMeals() {
   const [meals, setMeals] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [httpError, setHttpError] = useState(null);
+  const {
+    isLoading,
+    error: httpError,
+    sendRequest: sendHttpRequest,
+  } = useAJAX();
+
+  function extractMeals(mealsData) {
+    const fetchedMeals = [];
+
+    for (const key in mealsData) {
+      fetchedMeals.push({
+        id: key,
+        title: mealsData[key].name,
+        description: mealsData[key].description,
+        price: mealsData[key].price,
+      });
+    }
+
+    setMeals(fetchedMeals);
+  }
 
   useEffect(() => {
-    async function fetchMeals() {
-      try {
-        const response = await fetch(`${API_URL}/meals.json`);
-
-        if (!response.ok) {
-          throw new Error('Something went wrong!');
-        }
-
-        const data = await response.json();
-        const fetchedMeals = [];
-
-        for (const key in data) {
-          fetchedMeals.push({
-            id: key,
-            title: data[key].name,
-            description: data[key].description,
-            price: data[key].price,
-          });
-        }
-
-        setMeals(fetchedMeals);
-        setIsLoading(false);
-      } catch (error) {
-        setIsLoading(false);
-        setHttpError(error.message);
-      }
-    }
-    fetchMeals();
+    sendHttpRequest({ url: `${API_URL}/meals.json` }, extractMeals);
   }, []);
 
   if (isLoading) {
