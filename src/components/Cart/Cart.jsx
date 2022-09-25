@@ -3,11 +3,15 @@ import CartContext from '../../store/cart-context';
 import Modal from '../UI/Modal/Modal';
 import CartItem from './CartItem';
 import classes from './Cart.module.css';
+import CheckoutForm from './CheckoutForm';
 
 export default function Cart(props) {
   const [cartHasItems, setCartHasItems] = useState(false);
+  const [isCheckout, setIsCheckout] = useState(false);
   const cartCtx = useContext(CartContext);
+
   const totalAmount = cartCtx.totalAmount.toFixed(2);
+
   const cartItems = cartCtx.items.map(item => (
     <CartItem
       key={item.id}
@@ -18,6 +22,19 @@ export default function Cart(props) {
       onRemoveItem={removeItemHandler.bind(null, item.id)}
     />
   ));
+
+  const actionBtns = (
+    <div className={classes.actions}>
+      <button className={classes['button--alt']} onClick={props.onCloseCart}>
+        Close
+      </button>
+      {cartHasItems && (
+        <button className={classes.button} onClick={orderItemsHandler}>
+          Order
+        </button>
+      )}
+    </div>
+  );
 
   if (cartHasItems && cartItems.length === 0) {
     setCartHasItems(false);
@@ -35,6 +52,14 @@ export default function Cart(props) {
     cartCtx.removeFromCart(id);
   }
 
+  function orderItemsHandler() {
+    setIsCheckout(true);
+  }
+
+  function cancelOrderHandler() {
+    setIsCheckout(false);
+  }
+
   return (
     <Modal>
       <div>
@@ -43,15 +68,8 @@ export default function Cart(props) {
           <span>Total Amount</span>
           <span>${totalAmount}</span>
         </div>
-        <div className={classes.actions}>
-          <button
-            className={classes['button--alt']}
-            onClick={props.onCloseCart}
-          >
-            Close
-          </button>
-          {cartHasItems && <button className={classes.button}>Order</button>}
-        </div>
+        {isCheckout && <CheckoutForm onCancel={cancelOrderHandler} />}
+        {!isCheckout && actionBtns}
       </div>
     </Modal>
   );
