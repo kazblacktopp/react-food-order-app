@@ -1,11 +1,15 @@
 import React from 'react';
-import classes from './Input.module.css';
 
 function Input(props, ref) {
+  const { classes, id, label, hasError, ...remainingProps } = props;
+
   return (
-    <div className={classes.input}>
-      <label htmlFor={props.id}>{props.label}</label>
-      <input {...props} ref={ref} />
+    <div className={classes.divClass}>
+      <label htmlFor={id}>{label}</label>
+      <input id={id} {...remainingProps} ref={ref} />
+      {hasError && (
+        <p className={classes.errorClass}>Please enter a valid {id}.</p>
+      )}
     </div>
   );
 }

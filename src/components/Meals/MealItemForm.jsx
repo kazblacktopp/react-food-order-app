@@ -14,6 +14,7 @@ export default function MealItemForm(props) {
   return (
     <form className={classes.form} onSubmit={formSubmitHandler}>
       <Input
+        classes={{ divClass: classes.input }}
         ref={inputRef}
         id={`amount_${props.id}`}
         label="Amount"

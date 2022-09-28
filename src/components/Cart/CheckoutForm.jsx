@@ -1,4 +1,5 @@
 import useInput from '../../hooks/use-input';
+import Input from '../UI/Input';
 import classes from './CheckoutForm.module.css';
 
 function textIsValid(value) {
@@ -74,60 +75,58 @@ function CheckoutForm({ onCancel }) {
 
   return (
     <form className={classes.form} onSubmit={submitHandler}>
-      <div className={classes.control}>
-        <label htmlFor="name">Your Name</label>
-        <input
-          type="text"
-          id="name"
-          value={enteredName}
-          onChange={nameInputChangeHandler}
-          onBlur={nameInputBlurhandler}
-        />
-        {nameInputHasError && (
-          <p className={classes['error-text']}>Please enter a valid name.</p>
-        )}
-      </div>
-      <div className={classes.control}>
-        <label htmlFor="street">Street</label>
-        <input
-          type="text"
-          id="street"
-          valud={enteredStreet}
-          onChange={streetInputChangeHandler}
-          onBlur={streetInputBlurhandler}
-        />
-        {streetInputHasError && (
-          <p className={classes['error-text']}>Please enter a valid street.</p>
-        )}
-      </div>
-      <div className={classes.control}>
-        <label htmlFor="postal">Post Code</label>
-        <input
-          type="text"
-          id="postal"
-          valud={enteredPostalCode}
-          onChange={postalCodeInputChangeHandler}
-          onBlur={postalCodeInputBlurhandler}
-        />
-        {postalCodeInputHasError && (
-          <p className={classes['error-text']}>
-            Please enter a valid postal code.
-          </p>
-        )}
-      </div>
-      <div className={classes.control}>
-        <label htmlFor="city">City</label>
-        <input
-          type="text"
-          id="city"
-          valud={enteredCity}
-          onChange={cityInputChangeHandler}
-          onBlur={cityInputBlurhandler}
-        />
-        {cityInputHasError && (
-          <p className={classes['error-text']}>Please enter a valid city.</p>
-        )}
-      </div>
+      <Input
+        classes={{
+          divClass: classes.control,
+          errorClass: classes['error-text'],
+        }}
+        id={'name'}
+        label={'Your Name'}
+        type={'text'}
+        value={enteredName}
+        hasError={nameInputHasError}
+        onChange={nameInputChangeHandler}
+        onBlur={nameInputBlurhandler}
+      />
+      <Input
+        classes={{
+          divClass: classes.control,
+          errorClass: classes['error-text'],
+        }}
+        id={'street'}
+        label={'Street'}
+        type={'text'}
+        value={enteredStreet}
+        hasError={streetInputHasError}
+        onChange={streetInputChangeHandler}
+        onBlur={streetInputBlurhandler}
+      />
+      <Input
+        classes={{
+          divClass: classes.control,
+          errorClass: classes['error-text'],
+        }}
+        id={'post code'}
+        label={'Post Code'}
+        type={'text'}
+        value={enteredPostalCode}
+        hasError={postalCodeInputHasError}
+        onChange={postalCodeInputChangeHandler}
+        onBlur={postalCodeInputBlurhandler}
+      />
+      <Input
+        classes={{
+          divClass: classes.control,
+          errorClass: classes['error-text'],
+        }}
+        id={'city'}
+        label={'City'}
+        type={'text'}
+        value={enteredCity}
+        hasError={cityInputHasError}
+        onChange={cityInputChangeHandler}
+        onBlur={cityInputBlurhandler}
+      />
       <div className={classes.actions}>
         <button type="button" onClick={onCancel}>
           Cancel
