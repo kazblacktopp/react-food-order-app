@@ -10,7 +10,7 @@ function postalCodeIsValid(code) {
   return code.trim().length === 4;
 }
 
-function CheckoutForm({ onCancel }) {
+function CheckoutForm({ onSubmitOrder, onCancelOrder }) {
   const {
     value: enteredName,
     isValid: enteredNameIsValid,
@@ -65,7 +65,12 @@ function CheckoutForm({ onCancel }) {
       return;
     }
 
-    console.log(enteredName, enteredStreet, enteredPostalCode, enteredCity);
+    onSubmitOrder({
+      name: enteredName,
+      street: enteredStreet,
+      postCode: enteredPostalCode,
+      city: enteredCity,
+    });
 
     nameInputReset();
     streetInputReset();
@@ -128,7 +133,7 @@ function CheckoutForm({ onCancel }) {
         onBlur={cityInputBlurhandler}
       />
       <div className={classes.actions}>
-        <button type="button" onClick={onCancel}>
+        <button type="button" onClick={onCancelOrder}>
           Cancel
         </button>
         <button className={classes.submit} disabled={!checkoutFormIsValid}>

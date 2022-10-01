@@ -1,16 +1,22 @@
-import { useContext, useState } from 'react';
+import { Fragment, useContext, useState } from 'react';
+import useAJAX from '../../hooks/use-ajax';
 import CartContext from '../../store/cart-context';
 import Modal from '../UI/Modal/Modal';
 import CartItem from './CartItem';
-import classes from './Cart.module.css';
 import CheckoutForm from './CheckoutForm';
+import { API_URL } from '../../config/config';
+import classes from './Cart.module.css';
 
-export default function Cart(props) {
+export default function Cart({ onCloseCart }) {
   const [cartHasItems, setCartHasItems] = useState(false);
   const [isCheckout, setIsCheckout] = useState(false);
+  const [orderHasSubmitted, setOrderHasSubmitted] = useState(false);
   const cartCtx = useContext(CartContext);
-
-  const totalAmount = cartCtx.totalAmount.toFixed(2);
+  const {
+    isLoading,
+    error: httpError,
+    sendRequest: sendHttpRequest,
+  } = useAJAX();
 
   const cartItems = cartCtx.items.map(item => (
     <CartItem
@@ -25,7 +31,7 @@ export default function Cart(props) {
 
   const actionBtns = (
     <div className={classes.actions}>
-      <button className={classes['button--alt']} onClick={props.onCloseCart}>
+      <button className={classes['button--alt']} onClick={onCloseCart}>
         Close
       </button>
       {cartHasItems && (
@@ -33,6 +39,59 @@ export default function Cart(props) {
           Order
         </button>
       )}
+    </div>
+  );
+
+  const totalAmount = cartCtx.totalAmount.toFixed(2);
+
+  const modalContent = (
+    <Fragment>
+      <ul className={classes['cart-items']}>{cartItems}</ul>
+      <div className={classes.total}>
+        <span>Total Amount</span>
+        <span>${totalAmount}</span>
+      </div>
+      {isCheckout && (
+        <CheckoutForm
+          onSubmitOrder={submitOrderHandler}
+          onCancelOrder={cancelOrderHandler}
+        />
+      )}
+      {!isCheckout && actionBtns}
+    </Fragment>
+  );
+
+  const isLoadingContent = (
+    <div className={classes.isLoading}>
+      <p>Loading...</p>
+    </div>
+  );
+
+  let httpErrorMsg = httpError;
+
+  if (httpError === 'Failed to fetch') {
+    httpErrorMsg = 'Unable to submit order. Please try again.';
+  }
+
+  const httpErrorContent = (
+    <div className={classes.httpError}>
+      <p>{httpErrorMsg}</p>
+      <div className={classes.actions}>
+        <button className={classes.button} onClick={onCloseCart}>
+          Close
+        </button>
+      </div>
+    </div>
+  );
+
+  const orderHasSubmittedContent = (
+    <div className={classes.isSubmitted}>
+      <p>Your order has been submitted!</p>
+      <div className={classes.actions}>
+        <button className={classes.button} onClick={onCloseCart}>
+          Close
+        </button>
+      </div>
     </div>
   );
 
@@ -56,21 +115,47 @@ export default function Cart(props) {
     setIsCheckout(true);
   }
 
+  function submitOrderHandler(userData) {
+    const sendRequestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: {
+        user: userData,
+        orderedItems: cartCtx.items,
+      },
+    };
+
+    sendHttpRequest(
+      {
+        url: `${API_URL}/orders.json`,
+        options: sendRequestOptions,
+      },
+      processOrder
+    );
+  }
+
+  function processOrder(httpResData) {
+    if (!httpResData.name) {
+      httpErrorMsg = 'Unable to submit order. Please contact us!';
+      return;
+    }
+
+    setOrderHasSubmitted(true);
+    cartCtx.clearCart();
+  }
+
   function cancelOrderHandler() {
     setIsCheckout(false);
   }
 
   return (
     <Modal>
-      <div>
-        <ul className={classes['cart-items']}>{cartItems}</ul>
-        <div className={classes.total}>
-          <span>Total Amount</span>
-          <span>${totalAmount}</span>
-        </div>
-        {isCheckout && <CheckoutForm onCancel={cancelOrderHandler} />}
-        {!isCheckout && actionBtns}
-      </div>
+      {!isLoading && !httpError && !orderHasSubmitted && modalContent}
+      {isLoading && !httpError && isLoadingContent}
+      {httpError && httpErrorContent}
+      {orderHasSubmitted && orderHasSubmittedContent}
     </Modal>
   );
 }
