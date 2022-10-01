@@ -4,7 +4,7 @@ function useAJAX() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const sendRequest = useCallback(async (requestConfig, applyDataFn) => {
+  const sendRequest = useCallback(async (requestConfig, applyDataFn = null) => {
     const { url, options = null } = requestConfig;
     setIsLoading(true);
     setError(null);
@@ -21,15 +21,17 @@ function useAJAX() {
           : null
       );
 
-      if (!response.ok) {
-        throw new Error('Fetch request failed!');
-      }
-
       const data = await response.json();
 
-      applyDataFn(data);
-    } catch (error) {
-      setError(error.message || 'Something went wrong!');
+      if (!response.ok) {
+        throw new Error(`Fetch request failed! (${data.status})`);
+      }
+
+      if (applyDataFn) {
+        applyDataFn(data);
+      }
+    } catch (err) {
+      setError(err.message || 'Something went wrong!');
     }
     setIsLoading(false);
   }, []);
