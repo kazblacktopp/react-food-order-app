@@ -57,10 +57,14 @@ function cartStateReducer(state, action) {
     return { items: updatedCartItems, totalAmount: updatedTotalAmount };
   }
 
+  if (action.type === 'CLEAR-CART') {
+    return defaultCart;
+  }
+
   return state;
 }
 
-export default function CartProvider(props) {
+export default function CartProvider({ children }) {
   const [cartState, dispatchCartReducer] = useReducer(
     cartStateReducer,
     defaultCart
@@ -71,6 +75,7 @@ export default function CartProvider(props) {
     totalAmount: cartState.totalAmount,
     addToCart: addToCartHandler,
     removeFromCart: removeFromCartHandler,
+    clearCart: clearCartHandler,
   };
 
   function addToCartHandler(newItem) {
@@ -81,9 +86,11 @@ export default function CartProvider(props) {
     dispatchCartReducer({ type: 'REMOVE-ITEM', id: id });
   }
 
+  function clearCartHandler() {
+    dispatchCartReducer({ type: 'CLEAR-CART' });
+  }
+
   return (
-    <CartContext.Provider value={cartContext}>
-      {props.children}
-    </CartContext.Provider>
+    <CartContext.Provider value={cartContext}>{children}</CartContext.Provider>
   );
 }
